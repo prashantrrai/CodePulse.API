@@ -20,51 +20,92 @@ namespace CodePulse.API.Repositories.Implementations
 
         public async Task<Category> CreateAsync(Category category)
         {
-            await dbcontext.Categories.AddAsync(category);
-            await dbcontext.SaveChangesAsync();
-            return category;
+            try
+            {
+                await dbcontext.Categories.AddAsync(category);
+                await dbcontext.SaveChangesAsync();
+
+                return category;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task<List<Category>> GetAllAsync()
         {
-            var data = await dbcontext.Categories.ToListAsync();
-            return data;
+            try
+            {
+                var data = await dbcontext.Categories.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task<Category> GetAsyncById(Guid Id)
         {
-            var data = await dbcontext.Categories.FindAsync(Id);
-            return data;
+            try
+            {
+                var data = await dbcontext.Categories.FindAsync(Id);
+                return data;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task<bool> DeleteAsync(Guid Id)
         {
-            var category = await dbcontext.Categories.FindAsync(Id);
-            if(category == null)
+            try
             {
-                return false;
-            }
+                var category = await dbcontext.Categories.FindAsync(Id);
+                if (category == null)
+                {
+                    return false;
+                }
 
-            dbcontext.Categories.Remove(category);
-            await dbcontext.SaveChangesAsync();
-            return true;
+                dbcontext.Categories.Remove(category);
+                await dbcontext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task<Category> UpdateAsync (Guid Id, Category category)
         {
-            var existingCategory = await dbcontext.Categories.FindAsync(Id);
-
-            if (existingCategory == null)
+            try
             {
+                var existingCategory = await dbcontext.Categories.FindAsync(Id);
+
+                if (existingCategory == null)
+                {
+                    return existingCategory;
+                }
+
+                existingCategory.Name = category.Name;
+                existingCategory.UrlHandle = category.UrlHandle;
+
+                await dbcontext.SaveChangesAsync();
+
                 return existingCategory;
             }
+            catch (Exception ex)
+            {
 
-            existingCategory.Name = category.Name;
-            existingCategory.UrlHandle = category.UrlHandle;
-
-            await dbcontext.SaveChangesAsync();
-
-            return existingCategory;
+                throw;
+            }
         }
 
     }
